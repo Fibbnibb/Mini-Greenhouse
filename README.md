@@ -42,20 +42,6 @@ Each loop pass (~1 s, longer when an actuator fires):
 5. Print readings to serial.
 6. Serve one HTTP client if any is waiting.
 
-## Known issues
-
-1. **BME280 initialised twice** — the second `bme.begin(0x76)` block is redundant, and both use `while (1);` which hangs the board with no watchdog reset if the sensor is missing.
-2. **Blocking actuator delays** — the 20 s fan delay and 5 s pump delay stop everything, including the web server. A page request during a fan cycle waits up to 20 s or times out.
-3. **Web server is starved** — it's only polled once per loop, after a 1 s delay, so the page is always slow and occasionally unreachable. Move the client handling to the top of the loop and replace the delays with `millis()` timing.
-4. **Wrong pin comment** — the `AOUT_PIN` comment says GPIO 36 / ADC0 but the value is 33. (33 is the correct choice, since ADC2 pins don't work while Wi-Fi is active.)
-5. **Comment contradicts the threshold** — the pump condition reads "if soil moisture is below 500" but the test is `> 2470`. On most of these sensors a higher ADC value means *drier*, so the code is right and the comment is wrong.
-6. **No hysteresis** — at 29.9–30.0 °C the fan cycles repeatedly. Add a deadband, e.g. on at 30 °C, off at 27 °C.
-7. **Malformed HTML** — the `</table>` tag is missing, and soil moisture is labelled with the unit `m`, which isn't a unit of anything here. It's a raw 0–4095 ADC count; consider converting to a percentage.
-8. **`header` is collected but never used** — no request routing, so every URL returns the same page.
-9. **Return value of `display.begin()` is ignored**, so a missing OLED fails silently.
-10. **Unused code** — `SEALEVELPRESSURE_HPA` and `delayTime` are declared but never read, and `SPI.h` isn't needed for an I2C-only build.
-11. **OLED overflow** — four lines at text size 1 exactly fill 32 px, and "Soil moisture: " plus a four-digit value is wider than 128 px, so it wraps and pushes content off screen. Shorten the label to "Soil:".
-
 ## Build
 
 Install the ESP32 board package and the libraries above, set your Wi-Fi credentials,

@@ -17,8 +17,8 @@ Adafruit_BME280 bme; // I2C
 Adafruit_SSD1306 display = Adafruit_SSD1306(128, 32, &Wire);
 unsigned long delayTime;
 
-const char* ssid     = "get your own wifi";
-const char* password = "hgom4245";
+const char* ssid     = "------------";
+const char* password = "------------";
 
 // Set web server port number to 80
 WiFiServer server(80);

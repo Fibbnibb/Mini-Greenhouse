@@ -1,4 +1,4 @@
-# ESP32 Greenhouse Monitor
+# ESP32 Greenhouse
 
 An ESP32 reads temperature, pressure, humidity, and soil moisture, shows them on a
 small OLED, switches a fan and a water pump when thresholds are crossed, and serves
